@@ -21,7 +21,7 @@ class ChartBar extends StatelessWidget {
             height: 20,
             child: FittedBox(
               child: Text(
-                'R\$  ${this.value.toStringAsFixed(2).replaceAll('.', ',')}', 
+                'R\$${this.value.toStringAsFixed(2).replaceAll('.', ',')}', 
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
