@@ -30,6 +30,10 @@ class ExpensesApp extends StatelessWidget {
                 fontWeight: FontWeight.bold,
                 color: Colors.black,
               ),
+              button: const TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
             ),
             appBarTheme: AppBarTheme(
               titleTextStyle: TextStyle(
@@ -37,7 +41,8 @@ class ExpensesApp extends StatelessWidget {
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
-            )));
+            ),
+            ));
   }
 }
 
@@ -60,18 +65,18 @@ class _MyHomePageState extends State<MyHomePage> {
     Transaction(
         id: 't4', title: 'Conta de Gás', value: 0.00, date: DateTime.now().subtract(Duration(days:8))),
   ];
-  // final List<Transaction> _transactions = [];
+  //final List<Transaction> _transactions = [];
 
 
   List<Transaction> get _recentTransactions{
     return _transactions.where((element) => element.date.isAfter(DateTime.now().subtract(Duration(days:7)))).toList();
   }
 
-  _addTransaction(String title, double value) {
+  _addTransaction(String title, double value, DateTime date) {
     final newTransaction = Transaction(
         id: Random().nextDouble().toString(),
         title: title,
-        date: DateTime.now(),
+        date: date,
         value: value);
 
     setState(() {
@@ -81,6 +86,14 @@ class _MyHomePageState extends State<MyHomePage> {
     //fechar modal
     Navigator.of(context).pop();
   }
+
+  _deleteTransaction(String id){
+    setState(() {
+      _transactions.removeWhere((element) => (element.id == id));
+    });
+
+  }
+
 
   _openTransactionFormModal(BuildContext context) {
     showModalBottomSheet(
@@ -109,7 +122,7 @@ class _MyHomePageState extends State<MyHomePage> {
             // ignore: prefer_const_literals_to_create_immutables
             children: <Widget>[
               Chart(_recentTransactions),
-              TransactionList(_transactions),
+              TransactionList(_transactions, _deleteTransaction),
             ],
           ),
         ),

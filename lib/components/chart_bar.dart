@@ -11,19 +11,23 @@ class ChartBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final double percentage = value*100.0 / total;
+    double percentage = 0.0;
+    if(total > 0.0)
+     percentage = value*100.0 / total;
     return Container(
       child: Column(
         children:<Widget> [
           Container(
-            padding: EdgeInsets.fromLTRB(0, 5, 0, 5),
-            child: Text(
-              'R\$  ${this.value.toStringAsFixed(2).replaceAll('.', ',')}', 
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 11,
-                color: Theme.of(context).colorScheme.primary,
+            height: 20,
+            child: FittedBox(
+              child: Text(
+                'R\$  ${this.value.toStringAsFixed(2).replaceAll('.', ',')}', 
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 11,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
               ),
             ),
           ),
