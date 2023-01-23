@@ -3,7 +3,6 @@
 import 'package:flutter/material.dart';
 import 'components/chart.dart';
 import 'models/transaction.dart';
-import 'package:intl/intl.dart';
 import 'components/transaction_list.dart';
 import 'components/transaction_form.dart';
 import 'dart:math';
@@ -117,8 +116,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final mediaQueryOfContext = MediaQuery.of(context);
     bool isLandscape =
-        MediaQuery.of(context).orientation == Orientation.landscape;
+       mediaQueryOfContext.orientation == Orientation.landscape;
 
     final appBar = AppBar(
       title: Text('Despesas Pessoais'),
@@ -139,44 +139,46 @@ class _MyHomePageState extends State<MyHomePage> {
       backgroundColor: Theme.of(context).colorScheme.primary,
     );
 
-    final availableHeight = MediaQuery.of(context).size.height -
+    final availableHeight = mediaQueryOfContext.size.height -
         appBar.preferredSize.height -
         MediaQuery.of(context).padding.top;
 
     return Scaffold(
       appBar: appBar,
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          // ignore: prefer_const_literals_to_create_immutables
-          children: <Widget>[
-            // if (isLandscape)
-            //   Row(
-            //     mainAxisAlignment: MainAxisAlignment.center,
-            //     children: [
-            //       Text('Exibir gráfico'),
-            //       Switch(
-            //           value: _showChart,
-            //           onChanged: (value) {
-            //             setState(() {
-            //               _showChart = value;
-            //             });
-            //           }),
-            //     ],
-            //   ),
-            if (_showChart || !isLandscape)
-              Container(
-                  height: availableHeight * (isLandscape ? 0.7 : 0.3),
-                  child: Chart(
-                    _recentTransactions,
-                  )),
-            if (!_showChart || !isLandscape)
-              Container(
-                height: availableHeight * 0.7,
-                child: TransactionList(_transactions, _deleteTransaction),
-              ),
-          ],
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            // ignore: prefer_const_literals_to_create_immutables
+            children: <Widget>[
+              // if (isLandscape)
+              //   Row(
+              //     mainAxisAlignment: MainAxisAlignment.center,
+              //     children: [
+              //       Text('Exibir gráfico'),
+              //       Switch.adaptative(                         
+              //           value: _showChart,
+              //           onChanged: (value) {
+              //             setState(() {
+              //               _showChart = value;
+              //             });
+              //           }),
+              //     ],
+              //   ),
+              if (_showChart || !isLandscape)
+                Container(
+                    height: availableHeight * (isLandscape ? 0.7 : 0.3),
+                    child: Chart(
+                      _recentTransactions,
+                    )),
+              if (!_showChart || !isLandscape)
+                Container(
+                  height: availableHeight * (isLandscape ? 1.0 : 0.7),
+                  child: TransactionList(_transactions, _deleteTransaction),
+                ),
+            ],
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(

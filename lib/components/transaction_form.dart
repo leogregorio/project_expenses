@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:project_expenses/components/adaptative_date_picker.dart';
 import '../models/transaction.dart';
+import 'adaptative_button.dart';
 import 'package:intl/intl.dart';
+
+import 'adaptative_textfield.dart';
 
 class TransactionForm extends StatefulWidget {
   void Function(String, double, DateTime) onSubmit;
@@ -28,73 +32,75 @@ class _TransactionFormState extends State<TransactionForm> {
     widget.onSubmit(title, value, _selectedDate!);
   }
 
-  _showDatePicker(){
-    showDatePicker(context: context, initialDate: DateTime.now(), firstDate: DateTime(2019), lastDate: DateTime.now()
-    ).then((pickedDate){
-      if(pickedDate == null)
-      {
-        return;
-      }
-
-      setState(() {
-      _selectedDate = pickedDate;
-        
-      });
-    });
-  }
-
-
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 5,
-      child: Column(
-          // ignore: prefer_const_literals_to_create_immutables
-          children: <Widget>[
-            TextField(
-              controller: _titleController,
-              onSubmitted: (_) => _submitForm,
-              decoration: InputDecoration(
-                labelText: 'Título',
-              ),
-            ),
-            TextField(
-              controller: _valueController,
-              keyboardType: TextInputType.numberWithOptions(decimal: true),
-              onSubmitted: (_) => _submitForm,
-              decoration: InputDecoration(
-                labelText: 'Valor (R\$)',
-              ),
-            ),
-            Container(
-              height: 70,
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Text(_selectedDate == null ? "Nenhuma data selecionada!":
-                          'Data Selecionada: ${DateFormat('d/M/y').format(_selectedDate!)}',
-                        ),
-                  ),
-                  TextButton( 
-                      onPressed: _showDatePicker,
-                      child: Text(
-                        "Selecionar data",
-                        style: TextStyle(fontWeight: FontWeight.bold)
-                      )),
-                ],
-              ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+    return SingleChildScrollView(
+      child: Card(
+        elevation: 5,
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(
+              10, 10, 10, 10 + MediaQuery.of(context).viewInsets.bottom),
+          child: Column(
               // ignore: prefer_const_literals_to_create_immutables
-              children: [
-                ElevatedButton(
-                    onPressed: _submitForm,
-                    child: Text('Adicionar transação',
-                        )),
-              ],
-            )
-          ]),
+              children: <Widget>[
+                AdaptativeTextField('Título', _submitForm(), _titleController,
+                    TextInputType.text),
+                AdaptativeTextField(
+                    'Valor (R\$)',
+                    _submitForm(),
+                    _valueController,
+                    TextInputType.numberWithOptions(decimal: true)),
+                // TextField(
+                //   controller: _titleController,
+                //   onSubmitted: (_) => _submitForm,
+                //   decoration: InputDecoration(
+                //     labelText: 'Título',
+                //   ),
+                // ),
+                // TextField(
+                //   controller: _valueController,
+                //   keyboardType: TextInputType.numberWithOptions(decimal: true),
+                //   onSubmitted: (_) => _submitForm,
+                //   decoration: InputDecoration(
+                //     labelText: 'Valor (R\$)',
+                //   ),
+                // ),
+                AdaptativeDatePicker(_selectedDate, (newDate) {
+                  setState(() {
+                    _selectedDate = newDate;
+                  });
+                }, null),
+                // Container(
+                //   height: 70,
+                //   child: Row(
+                //     children: [
+                //       Expanded(
+                //         child: Text(
+                //           _selectedDate == null
+                //               ? "Nenhuma data selecionada!"
+                //               : 'Data Selecionada: ${DateFormat('d/M/y').format(_selectedDate!)}',
+                //         ),
+                //       ),
+                //       TextButton(
+                //           onPressed: _showDatePicker,
+                //           child: Text("Selecionar data",
+                //               style: TextStyle(fontWeight: FontWeight.bold))),
+                //     ],
+                //   ),
+                // ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  // ignore: prefer_const_literals_to_create_immutables
+                  children: [
+                    AdaptativeButton(
+                      'Adicionar transação',
+                      _submitForm,
+                    ),
+                  ],
+                )
+              ]),
+        ),
+      ),
     );
   }
 }
