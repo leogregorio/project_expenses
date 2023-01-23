@@ -47,20 +47,26 @@ class Chart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final availableHeight = MediaQuery.of(context).size.height;
+
     groupedTransactions;
-    return Card(
-      elevation: 6,
-      margin: EdgeInsets.all(20),
-      child: Padding(
-        padding: const EdgeInsets.all(10.0),
-        child: Row(          
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: groupedTransactions.map((e) => Flexible(
-            fit: FlexFit.tight,
-            child:
-              ChartBar(e['day'] as String, _weekTotalValue, e['value'] as double),
-          )).toList(),
-          ),
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.4,
+      child: Card(
+        elevation: 6,
+        margin: EdgeInsets.all(20),
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Row(          
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: groupedTransactions.map((e) => Flexible(
+              fit: FlexFit.tight,
+              child:
+                ChartBar(e['day'] as String, _weekTotalValue, e['value'] as double),
+            )).toList(),
+            ),
+        ),
       ),
     );
   }
